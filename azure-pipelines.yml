@@ -26,11 +26,10 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/Tailspin.SpaceGame.Web/Dockerfile'
         containerRegistry: 'Container Registry Connection'
         tags: |
-          $(tag)
-          
-     - task: Docker@2
-       displayName: 'Build and push the leaderboard image to container registry'
-       inputs:
+          $(tag) 
+    - task: Docker@2
+      displayName: 'Build and push the leaderboard image to container registry'
+      inputs:
         command: buildAndPush
         buildContext: $(Build.Repository.LocalPath)
         repository: $(leaderboardRepository)
@@ -39,8 +38,8 @@ stages:
         tags: |
           $(tag)
           
-     - publish: '$(Build.SourcesDirectory)/manifests'
-       artifact: manifests
+    - publish: '$(Build.SourcesDirectory)/manifests'
+      artifact: manifests
 
 - stage: 'Deploy'
   displayName: 'Deploy the containers to HML'
