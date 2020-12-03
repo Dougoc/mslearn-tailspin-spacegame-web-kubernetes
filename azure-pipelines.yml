@@ -2,7 +2,8 @@ trigger:
 - 'master'
 
 variables:
-  dockerRegistryServiceConnection: '6d32e122-1424-438c-bcdd-39cd230ff28e' 
+  dockerRegistryServiceConnection: '6d32e122-1424-438c-bcdd-39cd230ff28e'
+  kubernetesConnectionRegistry: '52122107-c35e-4584-a461-68a5ebbb5eb4' 
   buildConfiguration: 'Release'
   leaderboardRepository: 'leaderboard'
   imagePullSecret: 'secret'
@@ -65,15 +66,15 @@ stages:
             inputs:
               action: createSecret
               secretName: $(imagePullSecret)
-              dockerRegistryEndpoint: 'Container Registry Connection'
-              kubernetesServiceConnection: 'Kubernetes Cluster Connection'
+              dockerRegistryEndpoint: $(dockerRegistryServiceConnection)
+              kubernetesServiceConnection: $(kubernetesConnectionRegistry)
               namespace: 'spike'
               
           - task: KubernetesManifest@0
             displayName: Deploy to Kubernetes cluster
             inputs:
               action: deploy
-              kubernetesServiceConnection: 'Kubernetes Cluster Connection'
+              kubernetesServiceConnection: $(kubernetesConnectionRegistry)
               namespace: 'spike'
               manifests: |
                 $(Pipeline.Workspace)/manifests/deployment.yml
