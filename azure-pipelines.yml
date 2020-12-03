@@ -2,6 +2,7 @@ trigger:
 - 'master'
 
 variables:
+  dockerRegistryServiceConnection: '6d32e122-1424-438c-bcdd-39cd230ff28e' 
   buildConfiguration: 'Release'
   leaderboardRepository: 'leaderboard'
   imagePullSecret: 'secret'
@@ -24,7 +25,7 @@ stages:
         buildContext: $(Build.Repository.LocalPath)
         repository: $(webRepository)
         dockerfile: '$(Build.SourcesDirectory)/Tailspin.SpaceGame.Web/Dockerfile'
-        containerRegistry: 'somosecrprod.azurecr.io'
+        containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag) 
     - task: Docker@2
@@ -34,7 +35,7 @@ stages:
         buildContext: $(Build.Repository.LocalPath)
         repository: $(leaderboardRepository)
         dockerfile: '$(Build.SourcesDirectory)/Tailspin.SpaceGame.LeaderboardContainer/Dockerfile'
-        containerRegistry: 'somosecrprod.azurecr.io'
+        containerRegistry: $(dockerRegistryServiceConnection)
         tags: |
           $(tag)
           
